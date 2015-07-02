@@ -1,0 +1,17 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "baucis": "^1.5.0",
+    "baucis-swagger2": "innowatio/baucis-swagger2",
+    "express": "^4.13.0",
+    "mongoose": "^4.0.4"
+  }
+}
