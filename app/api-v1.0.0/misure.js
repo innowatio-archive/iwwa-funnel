@@ -1,10 +1,10 @@
 var attachModel = require("../lib/attach-model.js");
 
 var definition = {
-    Impianto: String,
-    IdVariabile: String,
-    Valore: String,
-    DataLettura: Date,
+    Impianto: {type: String, required: true},
+    IdVariabile: {type: String, required: true},
+    Valore: {type: String, required: true},
+    DataLettura: {type: Date, required: true},
     DataInizio: Date,
     DataFine: Date,
     Data: Date,

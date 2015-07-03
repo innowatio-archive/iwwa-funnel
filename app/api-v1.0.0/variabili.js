@@ -1,8 +1,8 @@
 var attachModel = require("../lib/attach-model.js");
 
 var definition = {
-    Codice: String,
-    Descrizione: String,
+    Codice: {type: String, required: true},
+    Descrizione: {type: String, required: true},
     UM: String,
     Frequenza: String,
     Tipo: String,
