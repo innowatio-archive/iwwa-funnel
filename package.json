@@ -16,9 +16,14 @@
     "cors": "^2.7.1",
     "express": "^4.13.0",
     "express-bunyan-logger": "^1.1.1",
+    "express-winston": "^0.3.1",
+    "express-winston-2": "0.0.2",
     "mongoose": "^4.0.6",
+    "ramda": "^0.15.1",
     "swagger-ui": "^2.1.0",
-    "title-case": "^1.1.1"
+    "title-case": "^1.1.1",
+    "winston": "^1.0.1",
+    "winston-cloudwatch": "innowatio/winston-cloudwatch"
   },
   "devDependencies": {
     "eslint": "^0.24.0"
