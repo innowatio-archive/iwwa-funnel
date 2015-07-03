@@ -1,6 +1,6 @@
-var mongoose = require("mongoose");
+var attachModel = require("../lib/attach-model.js");
 
-var schema = {
+var definition = {
     Codice: String,
     Descrizione: String,
     UM: String,
@@ -11,8 +11,9 @@ var schema = {
     DataCreazione: Date
 };
 
-var options = {
-    strict: "throw"
+var name = {
+    plural: "variabili",
+    singular: "variabile"
 };
 
-module.exports = new mongoose.Schema(schema, options);
+attachModel(definition, name);
