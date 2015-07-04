@@ -1,10 +1,14 @@
-var baucis            = require("baucis");
-var cors              = require("cors");
-var express           = require("express");
-var mongoose          = require("mongoose");
-var winston           = require("winston");
-var expressWinston    = require("express-winston");
-var R                 = require("ramda");
+var baucis         = require("baucis");
+var cors           = require("cors");
+var express        = require("express");
+var expressWinston = require("express-winston");
+var mongoose       = require("mongoose");
+var R              = require("ramda");
+var winston        = require("winston");
+/*
+*   Requiring `winston-cloudwatch` attaches the `CloudWatch` constructor to
+*   `winston.transports`
+*/
 require("winston-cloudwatch");
 
 var auth = require("./lib/auth-middleware.js");
@@ -12,12 +16,15 @@ var auth = require("./lib/auth-middleware.js");
 var config = {
     MONGO_URL: process.env.MONGO_URL || "mongodb://localhost:27017/iwwa-funnel",
     PASSWORD: process.env.PASSWORD || "PASSWORD",
-    PORT: 8012,
-    USERNAME: process.env.USERNAME || "USER",
-    LOG_FILE: process.env.LOG_FILE || "./logs/iwwa-funnel.log",
+    PORT: process.env.PORT || 8012,
+    USERNAME: process.env.USERNAME || "USERNAME",
     LOG_LEVEL: process.env.LOG_LEVEL || "info",
-    LOG_GROUP_NAME: process.env.LOG_GROUP_NAME,
-    LOG_GROUP_STREAM: process.env.LOG_GROUP_STREAM
+    AWS_CLOUDWATCH_LOG_GROUP_NAME: process.env.AWS_CLOUDWATCH_LOG_GROUP_NAME,
+    ENABLE_AWS_CLOUDWATCH: process.env.ENABLE_AWS_CLOUDWATCH,
+    AWS_CLOUDWATCH_LOG_STREAM_NAME: process.env.AWS_CLOUDWATCH_LOG_STREAM_NAME,
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_SECRET_KEY: process.env.AWS_SECRET_KEY,
+    AWS_REGION: process.env.AWS_REGION
 };
 
 // Use baucis decorators
@@ -46,15 +53,13 @@ var logger = new (winston.Logger)({
             json: true,
             colorize: true
         }),
-        new (winston.transports.File)({
-            filename: config.LOG_FILE,
-            json: false,
-            level: config.LOG_LEVEL
-        }),
-        (config.LOG_GROUP_NAME && config.LOG_GROUP_STREAM) && new winston.transports.CloudWatch({
+        config.ENABLE_AWS_CLOUDWATCH && new winston.transports.CloudWatch({
             level: config.LOG_LEVEL,
-            logGroupName: config.LOG_GROUP_NAME,
-            logStreamName: config.LOG_GROUP_STREAM
+            logGroupName: config.AWS_CLOUDWATCH_LOG_GROUP_NAME,
+            logStreamName: config.AWS_CLOUDWATCH_LOG_STREAM_NAME,
+            awsAccessKeyId: config.AWS_ACCESS_KEY_ID,
+            awsSecretKey: config.AWS_SECRET_KEY,
+            awsRegion: config.AWS_REGION
         })
     ].filter(R.identity)
 });
