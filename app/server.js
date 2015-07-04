@@ -11,7 +11,8 @@ var winston        = require("winston");
 */
 require("winston-cloudwatch");
 
-var auth = require("./lib/auth-middleware.js");
+var auth        = require("./lib/auth-middleware.js");
+var healthCheck = require("./lib/health-check.js");
 
 var config = {
     MONGO_URL: process.env.MONGO_URL || "mongodb://localhost:27017/iwwa-funnel",
@@ -19,8 +20,8 @@ var config = {
     PORT: process.env.PORT || 8012,
     USERNAME: process.env.USERNAME || "USERNAME",
     LOG_LEVEL: process.env.LOG_LEVEL || "info",
-    AWS_CLOUDWATCH_LOG_GROUP_NAME: process.env.AWS_CLOUDWATCH_LOG_GROUP_NAME,
     ENABLE_AWS_CLOUDWATCH: process.env.ENABLE_AWS_CLOUDWATCH,
+    AWS_CLOUDWATCH_LOG_GROUP_NAME: process.env.AWS_CLOUDWATCH_LOG_GROUP_NAME,
     AWS_CLOUDWATCH_LOG_STREAM_NAME: process.env.AWS_CLOUDWATCH_LOG_STREAM_NAME,
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_KEY: process.env.AWS_SECRET_KEY,
@@ -67,6 +68,7 @@ var logger = new (winston.Logger)({
 // Start express application
 express()
     .use(cors())
+    .use("/health", healthCheck())
     .use(auth(config.USERNAME, config.PASSWORD))
     .use(expressWinston.logger({
         winstonInstance: logger
